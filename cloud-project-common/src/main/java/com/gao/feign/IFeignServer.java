@@ -14,6 +14,6 @@ public interface IFeignServer {
     @PostMapping("/consuleUser")
     Map<String,Object> consuleUser();
 
-    @PostMapping("{path}")//@PathVariable("path")String path,
+    @PostMapping("{path}")
     Map<String,Object> excuteForPost(@PathVariable("path")String path,@RequestBody Map<String,Object> map);
 }
