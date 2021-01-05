@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -22,8 +22,8 @@ public class ClientController {
     private IFeignServer iFeignServer;
 
     @PostMapping("/saveUser")
-    public Map<String, Object> saveUser(@RequestParam Map<String,Object> map){
-        Map<String, Object> resMap = iFeignServer.excuteForPost("saveUser",map);
+    public List<User> saveUser(@RequestParam Map<String,Object> map){
+        List<User> resMap = (List<User>)iFeignServer.excuteForPost("saveUser",map);
         logger.info("resMap[{}]",resMap);
         return resMap;
     }

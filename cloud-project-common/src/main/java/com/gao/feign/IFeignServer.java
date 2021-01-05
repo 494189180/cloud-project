@@ -1,6 +1,5 @@
 package com.gao.feign;
 
-import com.gao.model.User;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,5 +14,5 @@ public interface IFeignServer {
     Map<String,Object> consuleUser();
 
     @PostMapping("{path}")
-    Map<String,Object> excuteForPost(@PathVariable("path")String path,@RequestBody Map<String,Object> map);
+    Object excuteForPost(@PathVariable("path")String path,@RequestBody Map<String,Object> map);
 }
