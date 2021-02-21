@@ -21,6 +21,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
+
 @RestController
 public class QRCreatedService {
 
@@ -29,20 +30,32 @@ public class QRCreatedService {
     @Resource
     private WxQrCodeFeignService wxQrCodeFeignService;
 
-    //<img :src="imgurl" alt="">
+    /**
+     * <img :src="imgurl" alt="">
+     * @param map
+     * @return
+     * @throws IOException
+     * @throws URISyntaxException
+     */
     @PostMapping("/qrcreated")
     public Map<String,Object> qrcreated(@RequestParam Map<String,Object> map) throws IOException, URISyntaxException {
         Map<String,Object> resMap = new HashMap<>();
-        //1获取token
+        /**
+         * 1获取token
+         */
+        String reqStr = String.format("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s","wx8a8797c55a1a6227","0dcbe6e8323088f97b620320b6cbb839");
         HttpRequestFeign httpRequestFeign = Feign.builder().target(Target.EmptyTarget.create(HttpRequestFeign.class));
-        String accessToken = httpRequestFeign.sendGetRequest(new URI("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx8a8797c55a1a6227&secret=0dcbe6e8323088f97b620320b6cbb839"));
+        String accessToken = httpRequestFeign.sendGetRequest(new URI(reqStr));
         //String accessToken = wxQrCodeFeignService.getAccessToken("wx8a8797c55a1a6227", "0dcbe6e8323088f97b620320b6cbb839");
         Map<String, String> parse = (Map<String, String>) JSONObject.parse(accessToken);
         logger.info("accessToken:"+accessToken);
-        //2.获取小程序码
+        /**
+         * 2.获取小程序码
+         */
         WxQrTokenCmd cmd = new WxQrTokenCmd("anneng", "pages/ql/index/index");
         String access_token = parse.get("access_token");
-        byte[] buffer = httpRequestFeign.sendPostRequest(new URI("https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=" + access_token), JSON.toJSONString(cmd));
+        String reqStr2 = String.format("https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=%s",access_token);
+        byte[] buffer = httpRequestFeign.sendPostRequest(new URI(reqStr2), JSON.toJSONString(cmd));
         //byte[] buffer = wxQrCodeFeignService.getUnlimited(access_token, cmd);
         String baseStr = "data:image/png;base64," + new String(Base64.encodeBase64(buffer));
         logger.info("baseStr:"+baseStr);
