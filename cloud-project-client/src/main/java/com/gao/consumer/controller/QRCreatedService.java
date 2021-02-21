@@ -41,7 +41,7 @@ public class QRCreatedService {
     public Map<String,Object> qrcreated(@RequestParam Map<String,Object> map) throws IOException, URISyntaxException {
         Map<String,Object> resMap = new HashMap<>();
         /**
-         * 1获取token
+         * 1.获取token
          */
         String reqStr = String.format("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s","wx8a8797c55a1a6227","0dcbe6e8323088f97b620320b6cbb839");
         HttpRequestFeign httpRequestFeign = Feign.builder().target(Target.EmptyTarget.create(HttpRequestFeign.class));
